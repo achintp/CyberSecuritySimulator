@@ -273,6 +273,10 @@ class SimulateCyberScenario(object):
 
 		self.stateHistory = self.state.stateHistory
 		
+		#payoff = getUtility(utilFunc)
+		#for items in self.stateHistory:
+			#for
+
 		for k,v in self.stateHistory.iteritems():
 			print k,
 			print v
