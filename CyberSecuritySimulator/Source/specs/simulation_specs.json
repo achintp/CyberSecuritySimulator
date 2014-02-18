@@ -1,0 +1,22 @@
+{
+
+	"assignment": {
+		"attackerList": {
+			"A":"periodic"
+		},
+
+		"defenderList": {
+			"D":"periodic"
+		}
+	},
+
+	"configuration":{
+		"numResources":3,
+		"startTime": 0,
+		"endTime":100,
+		"ResourceList":["ServerA", "ServerB", "ServerC"]
+
+	}
+
+
+}
