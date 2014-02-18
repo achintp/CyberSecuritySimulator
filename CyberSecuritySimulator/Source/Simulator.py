@@ -1,6 +1,6 @@
-import StateClasses
-import AgentClasses
-import Strategies
+import Resource.StateClasses as StateClasses
+import Resource.AgentClasses as AgentClasses
+import Resource.Strategies as Strategies
 import copy
 import time
 
