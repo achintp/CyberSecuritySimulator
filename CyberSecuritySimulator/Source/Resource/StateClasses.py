@@ -1,5 +1,6 @@
 import random
 import copy
+from math import exp
 
 def enum(**enums):
     """Defines enum types. Use by Obj=enum(dict)"""
@@ -25,7 +26,7 @@ class State(object):
         # healthEnum = enum({COMPR=-1, PROBED=0, HEALTHY=1})
         # playerEnum = enum({DEF=0, ATT=1})
         self.rArgs = {'healthState':{}, 'players':{}}
-        
+        self.rArgs['alpha'] = kwargs['alpha']
         #Initialize the resources according to the resource list that has been given
         # for name in kwargs['ResourceList']:
         #     self.rArgs['name'] = name
@@ -101,8 +102,8 @@ class State(object):
             print "--------------------------------------\n\n"
 
     def updateState(self, time):
-        self.recordHistory()
         self.updateTime(time)
+        self.recordHistory()
         self.resourceReports()
 
     def updateTime(self, time):
@@ -121,16 +122,19 @@ class Resource(object):
         self.stateEnum = kwargs['healthState']
         self.playerEnum = kwargs['players']
         self.probesTillNow = 0
+        self.totalProbesTillNow = 0
         self.probCompromise = 0
         self.reimageCount = 0
         self.totalDowntime = 0
         self.Status = "HEALTHY"
         self.controlledBy = "DEF"
+        self.alpha = kwargs['alpha']
 
     def report(self):
         return({"Status":self.Status,
                 "Name":self.name,
                 "Probes till now":self.probesTillNow,
+                "Total Probes till now":self.totalProbesTillNow,
                 "Probability of Compromise":self.probCompromise,
                 "Reimage Count":self.reimageCount,
                 "Total Downtime":self.totalDowntime,
@@ -163,9 +167,13 @@ class Resource(object):
     def incrementProb(self):
         """Increment probability of compromise depending on curve used"""
         #Placholder linear increasing method
-        self.probCompromise += 0.1      
-        if(self.probCompromise>=1):
-            self.probCompromise = 1
+        # self.probCompromise += 0.1      
+        # if(self.probCompromise>=1):
+        #     self.probCompromise = 1
+        if(self.probesTillNow < 0):
+            self.probCompromise = 0
+        else:
+            self.probCompromise = (1 - exp(-self.alpha*self.probesTillNow))
 
     def isCompromised(self):
         #Currently uses a simple random uniform sampling.

@@ -21,8 +21,8 @@ class AttackerStrategies(AgentStrategies):
 	def __init__(self, params):
 		super(AttackerStrategies, self).__init__(params)
 
-	def periodic(self, info):
-		timePeriod = 2
+	def periodic(self, info, period):
+		timePeriod = period
 		nextAttack = info['currentTime'] + timePeriod
 
 		attackOrder = sorted(info['resourceInfo'].items(), key = lambda x: x[1]['Probes till now'])
@@ -46,8 +46,8 @@ class DefenderStrategies(AgentStrategies):
 	def __init__(self, params):
 		super(DefenderStrategies, self).__init__(params)
 
-	def periodic(self, info):
-		timePeriod = 4
+	def periodic(self, info, period):
+		timePeriod = period
 		nextReimage = info['currentTime'] + timePeriod
 
 		defendOrder = sorted(info['resourceInfo'].items(), key = lambda x: x[1]['Probes till now'])

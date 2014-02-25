@@ -1,0 +1,23 @@
+Things to complete:
+
+-----------------------------------------------------------
+02/19:
+-----------------------------------------------------------
+1. Write the utility function - Done
+2. Write payoff dump - Done
+3. Write parsing simulator arguments - Done
+4. Write batch file - Done
+5. Change probability curve - 
+-----------------------------------------------------------
+02/20:
+-----------------------------------------------------------
+1. Put in config params for strategy as name - Done
+2. Put in config params for all costs - Done
+3. Put in config param for probabilistic curve - Done
+4. Put in internal simulator runs and average - Done
+5. Change the input parsing of roles, remove names - Done
+6. Change the sorting structure of the event - 
+7
+-----------------------------------------------------------
+
+-----------------------------------------------------------

@@ -1,5 +1,6 @@
 import Simulator
 import json
+from argparse import ArgumentParser
 
 def readJson(jsonFolder):
 	with open(jsonFolder + "/simulation_specs.json") as f:
@@ -9,30 +10,100 @@ def readJson(jsonFolder):
 	assign = data["assignment"]
 	config = data["configuration"]
 	params = {}
-	params['startTime'] = int(config["startTime"])
+	params['IOFolder'] = jsonFolder
+	# params['startTime'] = int(config["startTime"])
+	params['startTime'] = 0
 	params['endTime'] = int(config["endTime"])
-	params['attackerList'] = assign["attackerList"]
-	params['defenderList'] = assign["defenderList"]
-	params['ResourceList'] = config["ResourceList"]
 
+	#Construct attacker and defender list - fix this goddamn thing
+	for st in assign["ATT"]:
+		params['attackerList'] = {"A":st}
+	for st in assign["DEF"]:
+		params['defenderList'] = {"D":st}
+
+	params['ResourceList'] = []
+	#Construct resources list - deprecate as well
+	for i in range(0,3):
+		params['ResourceList'].append("Server"+str(i))
+	# params['ResourceList'] = config["ResourceList"]
+	params['dtCost'] = float(config["dtCost"])
+	params['prCost'] = float(config["prCost"])
+
+	l = config["DEF"].split(',')
+	for i in range(0, len(l)):
+		l[i] = float(l[i])
+	params['DEF'] = l
+
+	l = config["ATT"].split(',')
+	for i in range(0, len(l)):
+		l[i] = float(l[i])
+	params['ATT'] = l	
+	params['alpha'] = float(config['alpha'])
+	params['runs per sample'] = config["runs per sample"]
 	return params
 
-def testInput():
-	params = {
-			'startTime':0,
-			'endTime':100,
-			'ResourceList': ['ServerA', 'ServerB', 'ServerC'],
-			'attackerList': {'A':'periodic'},
-			'defenderList': {'D':'periodic'}
-		}
-		
+def parseArgs():
+	parser = ArgumentParser()
+	parser.add_argument('jsonFolder', type=str)
+	parser.add_argument('samples', type=int)
+	args = parser.parse_args()
+	params = readJson(args.jsonFolder)
+	params["samples"] = args.samples
 	return params
+
+def writeJson(payoffs, obs, args):
+	payoff = {"players":[]}
+	for name, strategy in args['attackerList'].iteritems():
+		payoff['players'].append({
+			"Name":name,
+			"Role":"ATT",
+			"Strategy":strategy,
+			"Total Probes":payoffs['totalProbes'],
+			"Payoff":payoffs["ATT"]
+			})
+
+	for name, strategy in args['defenderList'].iteritems():
+		payoff['players'].append({
+			"Name":name,
+			"Role":"DEF",
+			"Strategy":strategy,
+			"Total Downtime":payoffs['totalDownTime'],
+			"Payoff":payoffs["DEF"]
+			})
+
+	with open(args['IOFolder'] + "/observation_" + str(obs)\
+		 + ".json", "w") as outFile:
+		json.dump(payoff, outFile, indent=2)
+
+
 
 def runSimulator(params):
 	sim = Simulator.SimulateCyberScenario(params)
-	sim.Simulate()
+	payoff = sim.Simulate()
+	return payoff
+
+def main():
+	args = parseArgs()
+	rps = int(args["runs per sample"])
+	for i in range(args["samples"]):
+		cPayoff = {
+			"totalProbes": 0,
+			"totalDownTime": 0,
+			"DEF": 0,
+			"ATT": 0
+		}
+		for j in range(0,rps):
+			payoff = runSimulator(args)
+			for k,v in payoff.iteritems():
+				cPayoff[k] += v
+
+		for k,v in cPayoff.iteritems():
+			#print cPayoff[k]
+			cPayoff[k] /= rps
+			#print cPayoff[k]
+		#print "\n\n"
+		writeJson(cPayoff, i, args)	
 
 if __name__=='__main__':
-	#args = testInput()
-	args = readJson("specs")
-	runSimulator(args)
+	main()
+	

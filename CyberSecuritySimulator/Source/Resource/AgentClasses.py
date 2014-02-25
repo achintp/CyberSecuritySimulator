@@ -14,7 +14,10 @@ class Agent(object):
 		"""
 		#Initialize values
 		self.name = kwargs['name']
-		self.strategy = kwargs['strategy']
+		st = kwargs['strategy'].split('-')
+		self.strategy = st[0]
+		self.stparam = st[1]
+		# self.strategy = kwargs['strategy']
 		self.resourceList = kwargs['resourceList']
 		self.currentTime = kwargs['time']
 		self.previousTime = -1
@@ -117,13 +120,13 @@ class Attacker(Agent):
 			del d[v]
 
 		if not d:
-			print "/////////////////EMPTY///////////////\n\n"
+			#print "/////////////////EMPTY///////////////\n\n"
 			return -1
 			
 		c = {}
 		c['resourceInfo'] = d
 		c['currentTime'] = self.currentTime
-		action = self.decideAction(c)
+		action = self.decideAction(c, int(self.stparam))
 		action = action + (0,)
 		if(self.debug):
 			print action
@@ -135,6 +138,7 @@ class Attacker(Agent):
 		probability of compromise. Followed by atomic time attack.
 		"""
 		resource.probesTillNow += 1
+		resource.totalProbesTillNow += 1
 		resource.incrementProb()
 		resource.changeStatus(0)
 
@@ -150,7 +154,7 @@ class Attacker(Agent):
 			resource.changeStatus(-1)
 			resource.controlledBy = "ATT"
 			self.controlList[self.currentTime] = resource.name
-			print "Compromised " + resource.name
+			#print "Compromised " + resource.name
 
 		self.actionHistory[self.currentTime] = resource.name
 		return resource
@@ -202,7 +206,7 @@ class Defender(Agent):
 		targets = {}
 		targets['resourceInfo'] = d
 		targets['currentTime'] = self.currentTime
-		action = self.decideAction(targets)
+		action = self.decideAction(targets, int(self.stparam))
 		action = action + (1,)
 		if(self.debug):
 			print action

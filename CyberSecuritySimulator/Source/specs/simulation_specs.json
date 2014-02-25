@@ -1,21 +1,22 @@
 {
-
 	"assignment": {
-		"attackerList": {
-			"A":"periodic"
-		},
+		"ATT": [
+			"periodic-23"
+		],
 
-		"defenderList": {
-			"D":"periodic"
-		}
+		"DEF": [
+			"periodic-57"
+		]
 	},
 
 	"configuration":{
-		"numResources":3,
-		"startTime": 0,
-		"endTime":100,
-		"ResourceList":["ServerA", "ServerB", "ServerC"]
-
+		"endTime": "1000",
+		"dtCost": "-0.3",
+		"prCost": "-0.1",
+		"DEF": "0,0.1,0.7,1.0",
+		"ATT": "0,0.3,0.7,1.0",
+		"runs per sample": "60",
+		"alpha": "0.05"
 	}
 
 
