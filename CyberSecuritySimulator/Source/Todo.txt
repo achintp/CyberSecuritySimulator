@@ -17,7 +17,8 @@ Things to complete:
 4. Put in internal simulator runs and average - Done
 5. Change the input parsing of roles, remove names - Done
 6. Change the sorting structure of the event - 
-7
------------------------------------------------------------
 
 -----------------------------------------------------------
+02/24:
+-----------------------------------------------------------
+1. Fix queue sorting

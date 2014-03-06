@@ -3,15 +3,13 @@ import json
 from argparse import ArgumentParser
 
 def readJson(jsonFolder):
-	with open(jsonFolder + "/simulation_specs.json") as f:
+	with open(jsonFolder + "/simulation_spec.json") as f:
 		data = json.load(f)
-	#print data
 
 	assign = data["assignment"]
 	config = data["configuration"]
 	params = {}
 	params['IOFolder'] = jsonFolder
-	# params['startTime'] = int(config["startTime"])
 	params['startTime'] = 0
 	params['endTime'] = int(config["endTime"])
 
@@ -55,20 +53,20 @@ def writeJson(payoffs, obs, args):
 	payoff = {"players":[]}
 	for name, strategy in args['attackerList'].iteritems():
 		payoff['players'].append({
-			"Name":name,
-			"Role":"ATT",
-			"Strategy":strategy,
-			"Total Probes":payoffs['totalProbes'],
-			"Payoff":payoffs["ATT"]
+			# "Name":name,
+			"role":"ATT",
+			"strategy":strategy,
+			# "Total Probes":payoffs['totalProbes'],
+			"payoff":payoffs["ATT"]
 			})
 
 	for name, strategy in args['defenderList'].iteritems():
 		payoff['players'].append({
-			"Name":name,
-			"Role":"DEF",
-			"Strategy":strategy,
-			"Total Downtime":payoffs['totalDownTime'],
-			"Payoff":payoffs["DEF"]
+			# "Name":name,
+			"role":"DEF",
+			"strategy":strategy,
+			# "Total Downtime":payoffs['totalDownTime'],
+			"payoff":payoffs["DEF"]
 			})
 
 	with open(args['IOFolder'] + "/observation_" + str(obs)\

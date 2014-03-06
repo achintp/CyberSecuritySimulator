@@ -1,18 +1,14 @@
 {
   "players": [
     {
-      "Total Probes": 34, 
-      "Role": "ATT", 
-      "Name": "A", 
-      "Payoff": 46.443333333333335, 
-      "Strategy": "periodic-23"
+      "payoff": 41.18833333333334, 
+      "role": "ATT", 
+      "strategy": "periodic-23"
     }, 
     {
-      "Total Downtime": 107, 
-      "Role": "DEF", 
-      "Name": "D", 
-      "Payoff": 879.7483333333341, 
-      "Strategy": "periodic-57"
+      "payoff": 886.1150000000004, 
+      "role": "DEF", 
+      "strategy": "periodic-57"
     }
   ]
 }
