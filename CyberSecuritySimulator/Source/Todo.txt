@@ -22,3 +22,8 @@ Things to complete:
 02/24:
 -----------------------------------------------------------
 1. Fix queue sorting
+
+-----------------------------------------------------------
+1. Test priority queue
+2. Attacker should not have visibility when server reimaged
+3. Server waking does not aler Attacker

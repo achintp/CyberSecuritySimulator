@@ -5,13 +5,16 @@ from argparse import ArgumentParser
 def readJson(jsonFolder):
 	with open(jsonFolder + "/simulation_spec.json") as f:
 		data = json.load(f)
+	#print data
 
 	assign = data["assignment"]
 	config = data["configuration"]
 	params = {}
 	params['IOFolder'] = jsonFolder
+	# params['startTime'] = int(config["startTime"])
 	params['startTime'] = 0
 	params['endTime'] = int(config["endTime"])
+	params['downTime'] = int(config["downTime"])
 
 	#Construct attacker and defender list - fix this goddamn thing
 	for st in assign["ATT"]:
@@ -24,8 +27,8 @@ def readJson(jsonFolder):
 	for i in range(0,3):
 		params['ResourceList'].append("Server"+str(i))
 	# params['ResourceList'] = config["ResourceList"]
-	params['dtCost'] = float(config["dtCost"])
-	params['prCost'] = float(config["prCost"])
+	params['dtCost'] = -float(config["dtCost"])
+	params['prCost'] = -float(config["prCost"])
 
 	l = config["DEF"].split(',')
 	for i in range(0, len(l)):

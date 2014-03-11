@@ -5,6 +5,7 @@ import Resource.Utility as Utility
 import copy
 import time
 from pprint import pprint
+import random
 
 class SimulateCyberScenario(object):
 	"""
@@ -30,6 +31,7 @@ class SimulateCyberScenario(object):
 		self.params['startTime'] = args['startTime']
 		self.params['endTime'] = args['endTime']
 		self.params['currentTime'] = 0
+		self.params['downTime'] = args['downTime']
 		self.attackerList = []
 		self.defenderList = []
 		self.debug = 1
@@ -136,7 +138,7 @@ class SimulateCyberScenario(object):
 			Picks the next action from the event queue and
 			executes it.
 		"""
-		#self.printEvents()
+		self.printEvents()
 		#Check whether the event horizon has ended
 		nextEventTime = self.eventQueue[0][0]
 		if(nextEventTime > self.params['endTime']):
@@ -144,6 +146,10 @@ class SimulateCyberScenario(object):
 			self.gameState = 0
 			return
 		else:
+			#if more than one evnt are queued at the same time,
+            #shuffle them randomly
+			if(self.eventQueue[0][0] == self.eventQueue[1][0]):
+				self.shuffleEvents()
 			#remove next event from the queue
 			it = self.eventQueue.pop(0)
 			if self.debug:
@@ -186,7 +192,7 @@ class SimulateCyberScenario(object):
 				a.loseControl([it[1][0]])
 
 				 #add downtime event
-				waketime = self.params['currentTime'] + t[0]
+				waketime = self.params['currentTime'] + self.params['downTime']
 				self.eventQueue.append((waketime, it[1][0], 2))
 				if self.debug:
 					print r.name + " is DOWN. Will be up again at " + str(waketime)
@@ -258,6 +264,16 @@ class SimulateCyberScenario(object):
 			#self.printEvents()
 			pass
 
+	def shuffleEvents(self):
+		cTime = self.eventQueue[0][0]
+		count = 0
+		for i in range(1,3):
+			if(self.eventQueue[i][0] == cTime):
+				count += 1
+		rep = random.randint(0, count)
+		temp = self.eventQueue.pop(rep)
+		self.eventQueue.insert(0, rep)
+
 
 	def printEvents(self):
 		print "\n-----------------------------------------------------------"
@@ -285,8 +301,8 @@ class SimulateCyberScenario(object):
 			self.executeAction()
 			#time.sleep(1)
 			
-			# if self.debug:
-			# 	t = raw_input("Press to continue")
+			#if self.debug:
+				#t = raw_input("Press to continue")
 		self.params['currentTime'] = self.params['endTime']
 		self.updateInformation()
 
