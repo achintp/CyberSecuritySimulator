@@ -15,7 +15,7 @@
 		"prCost": "-0.1",
 		"DEF": "0,0.1,0.7,1.0",
 		"ATT": "0,0.3,0.7,1.0",
-		"runs per sample": "60",
+		"runs per sample": "5",
 		"alpha": "0.05"
 	}
 

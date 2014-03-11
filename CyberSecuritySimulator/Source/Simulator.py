@@ -32,7 +32,7 @@ class SimulateCyberScenario(object):
 		self.params['currentTime'] = 0
 		self.attackerList = []
 		self.defenderList = []
-		self.debug = 0
+		self.debug = 1
 		self.params['resourceReports'] = {}
 		self.gameState = 1
 
@@ -239,7 +239,7 @@ class SimulateCyberScenario(object):
 		info['time'] = self.params['currentTime']
 		self.attackerList[0].updateInformation(info)
 		self.defenderList[0].updateInformation(info)
-		#self.printEvents()
+		self.printEvents()
 
 	def flushEventQueue(self, name):
 		#print "Fush " + name
@@ -285,8 +285,8 @@ class SimulateCyberScenario(object):
 			self.executeAction()
 			#time.sleep(1)
 			
-			if self.debug:
-				t = raw_input("Press to continue")
+			# if self.debug:
+			# 	t = raw_input("Press to continue")
 		self.params['currentTime'] = self.params['endTime']
 		self.updateInformation()
 
