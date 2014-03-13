@@ -1,11 +1,11 @@
-import Resource.StateClasses as StateClasses
-import Resource.AgentClasses as AgentClasses
-import Resource.Strategies as Strategies
-import Resource.Utility as Utility
 import copy
 import time
-from pprint import pprint
 import random
+from pprint import pprint
+import Resource.Utility as Utility
+import Resource.Strategies as Strategies
+import Resource.StateClasses as StateClasses
+import Resource.AgentClasses as AgentClasses
 
 class SimulateCyberScenario(object):
 	"""
@@ -34,9 +34,11 @@ class SimulateCyberScenario(object):
 		self.params['downTime'] = args['downTime']
 		self.attackerList = []
 		self.defenderList = []
-		self.debug = 1
+		self.debug = 0
 		self.params['resourceReports'] = {}
 		self.gameState = 1
+		self.askAtt = True
+		self.askDef = True
 
 		#Construct utility parameters
 		self.utilParams = {}
@@ -138,7 +140,7 @@ class SimulateCyberScenario(object):
 			Picks the next action from the event queue and
 			executes it.
 		"""
-		self.printEvents()
+		# self.printEvents()
 		#Check whether the event horizon has ended
 		nextEventTime = self.eventQueue[0][0]
 		if(nextEventTime > self.params['endTime']):
@@ -184,9 +186,17 @@ class SimulateCyberScenario(object):
 				#print "Reimaging now?----------------------"
 				if self.debug:
 					print "D is reimaging " + r.name
+
+				if(r.controlledBy == "ATT"):
+					self.askAtt = True
+					if self.debug:
+						print "Compr server att knows"
+				else:
+					self.askAtt = False
+
 				d = self.defenderList[0]
 				t = d.reImage(r)
-
+				self.askDef = True				
 				 #remove from attackers control list
 				a = self.attackerList[0]
 				a.loseControl([it[1][0]])
@@ -200,7 +210,7 @@ class SimulateCyberScenario(object):
 				 #modify inactive list of state
 				self.state.inactiveResources[it[1][0]] = self.state.activeResources[it[1][0]]
 				del self.state.activeResources[it[1][0]]
-				self.flushEventQueue(r.name)
+				#self.flushEventQueue(r.name)
 				#print self.state.activeResources
 				#print self.state.inactiveResources
 
@@ -208,12 +218,32 @@ class SimulateCyberScenario(object):
 			elif(it[2] == 0):
 				#Probe event followed by attack event
 				#Grab attacker, execute probe, then execute attack
+				if(r.name in self.state.inactiveResources):
+					#Skips the server if it founds it went down in between
+					#Instead tries to pick ew server that is active and
+					#not compromised
+					if self.debug:
+						print "Skipping att act on " + r.name + " since down"
+					if not self.state.activeResources:
+						return
+					p = random.choice(self.state.activeResources.keys())
+					if(self.state.activeResources[p].controlledBy == "ATT"):
+						x = [tvar for tvar in self.state.activeResources]
+						x.remove(p)
+						p = x[0]
+					res = self.state.getResource(p)
+					r = res[p]
+					if self.debug:
+						print "Changing choice to\n" + r.name
+				# else:
 				if self.debug:
 					print "A is probing and attacking " + r.name
 				a = self.attackerList[0]
 				# r = self.state.getResource(*list(it[1][0]))
 				r = a.probe(r)
 				r = a.attack(r)
+				self.askDef = True
+				self.askAtt = True
 			elif(it[2] == 2):
 				#Downtime over for resource
 				if self.debug:
@@ -223,6 +253,8 @@ class SimulateCyberScenario(object):
 				#print "Resource Activated---------------------\n\n"
 				#print self.state.activeResources
 				r.changeStatus(1)
+				self.askDef = True
+				self.askAtt = False
 
 				#print "Resource up and running"
 				#print r.report()
@@ -245,7 +277,7 @@ class SimulateCyberScenario(object):
 		info['time'] = self.params['currentTime']
 		self.attackerList[0].updateInformation(info)
 		self.defenderList[0].updateInformation(info)
-		self.printEvents()
+		#self.printEvents()
 
 	def flushEventQueue(self, name):
 		#print "Fush " + name
@@ -272,7 +304,7 @@ class SimulateCyberScenario(object):
 				count += 1
 		rep = random.randint(0, count)
 		temp = self.eventQueue.pop(rep)
-		self.eventQueue.insert(0, rep)
+		self.eventQueue.insert(0, temp)
 
 
 	def printEvents(self):
@@ -296,8 +328,10 @@ class SimulateCyberScenario(object):
 
 		while(self.gameState):
 			self.updateInformation()
-			self.askAttacker()
-			self.askDefender()
+			if(self.askAtt):
+				self.askAttacker()
+			if(self.askDef):
+				self.askDefender()
 			self.executeAction()
 			#time.sleep(1)
 			
@@ -312,34 +346,9 @@ class SimulateCyberScenario(object):
 		utilFunc = u.getUtility('simpleCIA')
 		payoff = utilFunc(self.stateHistory)
 
-		# for k,v in self.stateHistory.iteritems():
-		# 	print k,
-		# 	print v
-		# 	print '\n'
-
-		#pprint(self.stateHistory)
-
 		if(self.debug):
-			for k,v in self.stateHistory.iteritems():
-				print k
-				print v 
+			for it in sorted(self.stateHistory.items()):
+				print it
 				print '\n\n'
 
 		return payoff
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

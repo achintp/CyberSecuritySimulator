@@ -24,6 +24,6 @@ Things to complete:
 1. Fix queue sorting
 
 -----------------------------------------------------------
-1. Test priority queue
-2. Attacker should not have visibility when server reimaged
-3. Server waking does not aler Attacker
+1. Test priority queue - Incorporate shuffling for clashes
+2. Attacker should not have visibility when server reimaged unless control is lost - Done
+3. Server waking does not alert Attacker - Done

@@ -115,6 +115,7 @@ class Attacker(Agent):
 		if self.debug:
 			print "Control List--------------------------"
 			print self.controlList
+			print d
 
 		for k,v in self.controlList.iteritems():
 			del d[v]
