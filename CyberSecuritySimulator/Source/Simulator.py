@@ -228,9 +228,17 @@ class SimulateCyberScenario(object):
 						return
 					p = random.choice(self.state.activeResources.keys())
 					if(self.state.activeResources[p].controlledBy == "ATT"):
+						if self.debug:
+							print "Changing again since" + p + " is already compromised"
 						x = [tvar for tvar in self.state.activeResources]
 						x.remove(p)
 						p = x[0]
+						if self.debug:
+							print "New chosen as" + p + " tack."
+						if(self.state.activeResources[p].controlledBy == "ATT"):
+							if self.debug:
+								print "Even this is compromised. No action possible"
+							return
 					res = self.state.getResource(p)
 					r = res[p]
 					if self.debug:
