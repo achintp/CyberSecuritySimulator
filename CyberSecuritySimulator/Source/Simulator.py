@@ -232,6 +232,8 @@ class SimulateCyberScenario(object):
 							print "Changing again since" + p + " is already compromised"
 						x = [tvar for tvar in self.state.activeResources]
 						x.remove(p)
+						if not x:
+							return
 						p = x[0]
 						if self.debug:
 							print "New chosen as" + p + " tack."
