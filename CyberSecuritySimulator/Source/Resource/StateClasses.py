@@ -129,6 +129,7 @@ class Resource(object):
         self.Status = "HEALTHY"
         self.controlledBy = "DEF"
         self.alpha = kwargs['alpha']
+        self.probeHistory = []
 
     def report(self):
         return({"Status":self.Status,
@@ -138,7 +139,8 @@ class Resource(object):
                 "Probability of Compromise":self.probCompromise,
                 "Reimage Count":self.reimageCount,
                 "Total Downtime":self.totalDowntime,
-                "Control": self.controlledBy})
+                "Control": self.controlledBy,
+                "Probe History": self.probeHistory})
 
     def getStatus(self):
         return(self.Status)

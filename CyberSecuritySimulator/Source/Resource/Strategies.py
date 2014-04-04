@@ -47,9 +47,35 @@ class DefenderStrategies(AgentStrategies):
 		super(DefenderStrategies, self).__init__(params)
 
 	def periodic(self, info, period):
+		"""
+		info = { 
+			currentTime: v,
+			resourceInfo:{
+				name: report
+			}
+		}
+		"""
 		timePeriod = period
 		nextReimage = info['currentTime'] + timePeriod
 
 		defendOrder = sorted(info['resourceInfo'].items(), key = lambda x: x[1]['Probes till now'])
 		nextAction = (nextReimage, defendOrder[-1])
 		return nextAction
+
+	def periodicRand(self, info, period):
+		timePeriod = period
+		nextReimage = info['currentTime'] + timePeriod
+
+		resList = info['resourceInfo'].items()
+
+		random.seed()
+		index = random.randint(0, len(resList)-1)
+
+		nextAction = (nextReimage, resList[index])
+		return nextAction
+
+	# def periodicInt(self, info, threshold):
+		
+
+
+
