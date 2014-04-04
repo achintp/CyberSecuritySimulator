@@ -21,9 +21,20 @@ Things to complete:
 -----------------------------------------------------------
 02/24:
 -----------------------------------------------------------
-1. Fix queue sorting
+1. Fix queue sorting - Done
 
 -----------------------------------------------------------
-1. Test priority queue - Incorporate shuffling for clashes
+1. Test priority queue - Incorporate shuffling for clashes - Done
 2. Attacker should not have visibility when server reimaged unless control is lost - Done
 3. Server waking does not alert Attacker - Done
+
+-----------------------------------------------------------
+04/02:
+-----------------------------------------------------------
+
+1. Implement strategy - non random for reimage
+2. Implement strategy -  time based reimage
+3. Graph for large range - with random
+4. Get eq for random
+5. Graph for large range - non random
+6. Get equ for non random

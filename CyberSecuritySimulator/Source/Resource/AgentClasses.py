@@ -140,6 +140,7 @@ class Attacker(Agent):
 		"""
 		resource.probesTillNow += 1
 		resource.totalProbesTillNow += 1
+		resource.probeHistory.append(self.currentTime)
 		resource.incrementProb()
 		resource.changeStatus(0)
 
@@ -201,7 +202,7 @@ class Defender(Agent):
 				d[k] = v
 
 		if not d:
-			print "/////////////////EMPTY///////////////\n\n"
+			# print "/////////////////EMPTY///////////////\n\n"
 			return -1
 
 		targets = {}

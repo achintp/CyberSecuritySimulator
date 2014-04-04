@@ -49,11 +49,21 @@ class SimulateCyberScenario(object):
 
 		#Initialize the event queue
 		f = (self.params['endTime'], 0, -1)
-		# self.eventQueue = list(tuple(self.params['endTime'], 0, -1))
 		self.eventQueue = [f]
 		#Initialize the state variable
 		self.state = StateClasses.State(**{'ResourceList':args['ResourceList'], 'alpha':args['alpha']})
 		self.params['resourceReports'] = self.state.resourceReportsList
+		#resourceReports = {
+		# 'name of resource':{
+		# 	Status:v, 
+		# 	Name:v, 
+		# 	Probes till now:v, 
+		# 	total probes:v, 
+		# 	prob:v, 
+		# 	reimage count:v, 
+		# 	total downtime:v,
+		# 	control:v}
+		# }
 
 		#Initialize the agents
 		for k,v in args['attackerList'].iteritems():
@@ -113,6 +123,7 @@ class SimulateCyberScenario(object):
 		"""
 			Analogous to attacker 
 		"""
+		#If existing defender event in queue, then keep that
 		for items in self.eventQueue:
 			if(items[2] == 1): 
 				#print "Defender Action exists-------------------"
