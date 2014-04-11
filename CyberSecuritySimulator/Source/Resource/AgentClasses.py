@@ -140,7 +140,11 @@ class Attacker(Agent):
 		"""
 		resource.probesTillNow += 1
 		resource.totalProbesTillNow += 1
+<<<<<<< HEAD
 		# resource.probeHistory.append(self.currentTime)
+=======
+		resource.probeHistory.append(self.currentTime)
+>>>>>>> 2d2f526d03b5e690e1d35e58f4231472c83f37cf
 		resource.incrementProb()
 		resource.changeStatus(0)
 
@@ -203,10 +207,14 @@ class Defender(Agent):
 
 		if not d:
 			# print "/////////////////EMPTY///////////////\n\n"
+<<<<<<< HEAD
 			if 'periodic' in self.strategy:
 				return (self.currentTime + int(self.stparam), None, 1)
 			else:
 				return -1
+=======
+			return -1
+>>>>>>> 2d2f526d03b5e690e1d35e58f4231472c83f37cf
 
 		targets = {}
 		targets['resourceInfo'] = d

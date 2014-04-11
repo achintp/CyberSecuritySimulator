@@ -286,9 +286,12 @@ class SimulateCyberScenario(object):
 						x = [tvar for tvar in self.state.activeResources]
 						x.remove(p)
 						if not x:
+<<<<<<< HEAD
 							#There are no uncompromised servers active
 							self.askAtt = True
 							self.askDef = True
+=======
+>>>>>>> 2d2f526d03b5e690e1d35e58f4231472c83f37cf
 							return
 						p = x[0]
 						if self.debug:
