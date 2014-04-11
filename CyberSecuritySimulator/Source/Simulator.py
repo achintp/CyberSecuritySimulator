@@ -198,14 +198,17 @@ class SimulateCyberScenario(object):
 					#Handles the dummy event. For now only attacker
 					#has a dummy event. Makes sure attacker queues
 					#new action
-					print "Dummy handled"
+					if self.debug:
+						print "Dummy handled"
 					if(it[2] == 0):
-						print "attacker dummy"
+						if self.debug:
+							print "attacker dummy"
 						self.askAtt = True
 						self.askDef = False
 						return
 					if(it[2] == 1):
-						print "Defender Dummy"
+						if self.debug:
+							print "Defender Dummy"
 						self.askDef = True
 						self.askAtt = False
 					return
@@ -286,12 +289,9 @@ class SimulateCyberScenario(object):
 						x = [tvar for tvar in self.state.activeResources]
 						x.remove(p)
 						if not x:
-<<<<<<< HEAD
 							#There are no uncompromised servers active
 							self.askAtt = True
 							self.askDef = True
-=======
->>>>>>> 2d2f526d03b5e690e1d35e58f4231472c83f37cf
 							return
 						p = x[0]
 						if self.debug:

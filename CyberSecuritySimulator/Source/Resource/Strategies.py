@@ -63,11 +63,7 @@ class DefenderStrategies(AgentStrategies):
 			}
 		}
 		"""
-<<<<<<< HEAD
 		timePeriod = int(period)
-=======
-		timePeriod = period
->>>>>>> 2d2f526d03b5e690e1d35e58f4231472c83f37cf
 		nextReimage = info['currentTime'] + timePeriod
 
 		defendOrder = sorted(info['resourceInfo'].items(), key = lambda x: x[1]['Probes till now'])
@@ -75,11 +71,7 @@ class DefenderStrategies(AgentStrategies):
 		return nextAction
 
 	def periodicRand(self, info, period):
-<<<<<<< HEAD
 		timePeriod = int(period)
-=======
-		timePeriod = period
->>>>>>> 2d2f526d03b5e690e1d35e58f4231472c83f37cf
 		nextReimage = info['currentTime'] + timePeriod
 
 		resList = info['resourceInfo'].items()
@@ -90,7 +82,6 @@ class DefenderStrategies(AgentStrategies):
 		nextAction = (nextReimage, resList[index])
 		return nextAction
 
-<<<<<<< HEAD
 	def probeCount(self, info, threshold):
 		"""
 			DON'T USE. If compromise succeeds without threshold
@@ -140,10 +131,3 @@ class DefenderStrategies(AgentStrategies):
 					nextAction = (nextTime, maxServer)
 					return nextAction
 			return -1
-=======
-	# def periodicInt(self, info, threshold):
-		
-
-
-
->>>>>>> 2d2f526d03b5e690e1d35e58f4231472c83f37cf
