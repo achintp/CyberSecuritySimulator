@@ -122,12 +122,12 @@ class Attacker(Agent):
 
 		if not d:
 			#print "/////////////////EMPTY///////////////\n\n"
-			return -1
+			return (self.currentTime + int(self.stparam), None, 0)
 			
 		c = {}
 		c['resourceInfo'] = d
 		c['currentTime'] = self.currentTime
-		action = self.decideAction(c, int(self.stparam))
+		action = self.decideAction(c, self.stparam)
 		action = action + (0,)
 		if(self.debug):
 			print action
@@ -140,7 +140,7 @@ class Attacker(Agent):
 		"""
 		resource.probesTillNow += 1
 		resource.totalProbesTillNow += 1
-		resource.probeHistory.append(self.currentTime)
+		# resource.probeHistory.append(self.currentTime)
 		resource.incrementProb()
 		resource.changeStatus(0)
 
@@ -203,12 +203,17 @@ class Defender(Agent):
 
 		if not d:
 			# print "/////////////////EMPTY///////////////\n\n"
-			return -1
+			if 'periodic' in self.strategy:
+				return (self.currentTime + int(self.stparam), None, 1)
+			else:
+				return -1
 
 		targets = {}
 		targets['resourceInfo'] = d
 		targets['currentTime'] = self.currentTime
-		action = self.decideAction(targets, int(self.stparam))
+		action = self.decideAction(targets, self.stparam)
+		if action == -1:
+			return action
 		action = action + (1,)
 		if(self.debug):
 			print action
@@ -223,11 +228,11 @@ class Defender(Agent):
 		resource.controlledBy = "DEF"
 		resource.changeStatus(2)
 		self.actionHistory[self.currentTime] = resource.name
-		downtime = 5
+		# downtime = 5
 
 		#print resource.report()
 
-		return (downtime, resource)
+		return resource
 
 
 

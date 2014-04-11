@@ -1,0 +1,16 @@
+Mapping of player strategies
+ATT:[periodic-1 periodic-10 periodic-11 periodic-15 periodic-17 periodic-19 periodic-2 periodic-23 periodic-3 periodic-4 periodic-5 periodic-6 periodic-7 periodic-8 periodic-9 ]
+DEF:[periodic-10 periodic-11 periodic-12 periodic-13 periodic-14 periodic-15 periodic-16 periodic-17 periodic-18 periodic-19 periodic-20 periodic-21 periodic-22 periodic-23 periodic-24 periodic-25 periodic-26 periodic-27 periodic-28 periodic-29 periodic-3 periodic-37 periodic-57 periodic-6 periodic-7 ]
+
+
+Computes Nash equilibria using extreme point enumeration
+[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+
+
+Compute equilibria via simplicial subdivision
+[Fraction(1, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1)]
+[Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(1, 1)]
+
+
+Compute equilibria in a two-player game via linear complementarity

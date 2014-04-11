@@ -130,8 +130,11 @@ class Resource(object):
         self.controlledBy = "DEF"
         self.alpha = kwargs['alpha']
         self.probeHistory = []
+        self.lastReImage = -1
+        self.downTime = []
 
     def report(self):
+        r = copy.deepcopy(self.probeHistory)
         return({"Status":self.Status,
                 "Name":self.name,
                 "Probes till now":self.probesTillNow,
@@ -140,7 +143,9 @@ class Resource(object):
                 "Reimage Count":self.reimageCount,
                 "Total Downtime":self.totalDowntime,
                 "Control": self.controlledBy,
-                "Probe History": self.probeHistory})
+                "Probe History": r,
+                "Last ReImage": self.lastReImage,
+                "Downtimes": self.downTime})
 
     def getStatus(self):
         return(self.Status)

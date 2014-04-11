@@ -39,6 +39,12 @@ class SimulateCyberScenario(object):
 		self.gameState = 1
 		self.askAtt = True
 		self.askDef = True
+		self.simType = 0
+		token = 'probe'
+
+		for k,v in args['defenderList'].iteritems():
+			if token in v:
+				self.simType = 1
 
 		#Construct utility parameters
 		self.utilParams = {}
@@ -46,6 +52,7 @@ class SimulateCyberScenario(object):
 		self.utilParams['prCost'] = args['prCost']
 		self.utilParams['DEF'] = args['DEF']
 		self.utilParams['ATT'] = args['ATT']
+		self.utilParams['downTime'] = args['downTime']
 
 		#Initialize the event queue
 		f = (self.params['endTime'], 0, -1)
@@ -106,7 +113,6 @@ class SimulateCyberScenario(object):
 		for att in self.attackerList:
 			att.updateInformation(d)
 			nextEvent = att.getAction()
-			if nextEvent == -1: return
 
 			for index, items in enumerate(self.eventQueue):
 				if items[2] == 0:
@@ -117,7 +123,9 @@ class SimulateCyberScenario(object):
 		self.sortEventQueue()
 
 		if(self.debug):
+			print "After asking attacker\n\n"
 			print self.eventQueue
+			print "\n\n"
 
 	def askDefender(self):
 		"""
@@ -128,7 +136,12 @@ class SimulateCyberScenario(object):
 			if(items[2] == 1): 
 				#print "Defender Action exists-------------------"
 				#print items
-				return
+				if(items[1] == None or self.simType == 1):
+					self.eventQueue.remove(items)
+				else:
+					if self.debug:
+						print "Defender actiokn exists"
+					return
 
 		d = dict(self.params['resourceReports'])
 		d['time'] = self.params['currentTime']
@@ -136,12 +149,17 @@ class SimulateCyberScenario(object):
 			defs.updateInformation(d)
 			nextEvent = defs.getAction()
 			if nextEvent == -1:
-				return
+				if self.debug:
+					print "No defender Action"
+				return 0
 			self.eventQueue.append(nextEvent)
 
 		self.sortEventQueue()
 		if(self.debug):
+			print "After asking defender\n\n"
 			print self.eventQueue
+			print "\n\n"
+		return 1
 
 	def sortEventQueue(self):
 		self.eventQueue = sorted(self.eventQueue)
@@ -151,7 +169,6 @@ class SimulateCyberScenario(object):
 			Picks the next action from the event queue and
 			executes it.
 		"""
-		# self.printEvents()
 		#Check whether the event horizon has ended
 		nextEventTime = self.eventQueue[0][0]
 		if(nextEventTime > self.params['endTime']):
@@ -159,22 +176,39 @@ class SimulateCyberScenario(object):
 			self.gameState = 0
 			return
 		else:
-			#if more than one evnt are queued at the same time,
+			#if more than one event are queued at the same time,
             #shuffle them randomly
-			if(self.eventQueue[0][0] == self.eventQueue[1][0]):
-				self.shuffleEvents()
+			if len(self.eventQueue) > 2:
+				if(self.eventQueue[0][0] == self.eventQueue[1][0]):
+					self.shuffleEvents()
 			#remove next event from the queue
 			it = self.eventQueue.pop(0)
 			if self.debug:
 				print "Event popped-------------------"
 				print it
-				#print it[1][0]
 
 			self.params['currentTime'] = it[0]
-			#print "The time is: " + str(self.params['currentTime'])
+			if self.debug:
+				print "The time is: " + str(self.params['currentTime'])
 			if(it[2] == 0 or it[2] == 1):
-				res = self.state.getResource(*[it[1][0]])
-				r = res[it[1][0]]
+				if(it[1] != None):
+					res = self.state.getResource(*[it[1][0]])
+					r = res[it[1][0]]
+				else:
+					#Handles the dummy event. For now only attacker
+					#has a dummy event. Makes sure attacker queues
+					#new action
+					print "Dummy handled"
+					if(it[2] == 0):
+						print "attacker dummy"
+						self.askAtt = True
+						self.askDef = False
+						return
+					if(it[2] == 1):
+						print "Defender Dummy"
+						self.askDef = True
+						self.askAtt = False
+					return
 			elif(it[2] == 2):
 				res = self.state.getResource(*[it[1]])
 				r = res[it[1]]
@@ -207,6 +241,10 @@ class SimulateCyberScenario(object):
 
 				d = self.defenderList[0]
 				t = d.reImage(r)
+				r.lastReImage = self.params['currentTime']
+				timePair = []
+				timePair.append(self.params['currentTime'])
+				r.downTime.append(timePair)
 				self.askDef = True				
 				 #remove from attackers control list
 				a = self.attackerList[0]
@@ -230,12 +268,16 @@ class SimulateCyberScenario(object):
 				#Probe event followed by attack event
 				#Grab attacker, execute probe, then execute attack
 				if(r.name in self.state.inactiveResources):
-					#Skips the server if it founds it went down in between
-					#Instead tries to pick ew server that is active and
+					#Skips the server if it finds it went down in between
+					#Instead tries to pick new server that is active and
 					#not compromised
 					if self.debug:
 						print "Skipping att act on " + r.name + " since down"
 					if not self.state.activeResources:
+						if self.debug:
+							print "No active servers to attack"
+							self.askAtt = True
+							self.askDef = True
 						return
 					p = random.choice(self.state.activeResources.keys())
 					if(self.state.activeResources[p].controlledBy == "ATT"):
@@ -244,13 +286,19 @@ class SimulateCyberScenario(object):
 						x = [tvar for tvar in self.state.activeResources]
 						x.remove(p)
 						if not x:
+							#There are no uncompromised servers active
+							self.askAtt = True
+							self.askDef = True
 							return
 						p = x[0]
 						if self.debug:
 							print "New chosen as" + p + " tack."
 						if(self.state.activeResources[p].controlledBy == "ATT"):
+							#Both active servers are compromised
 							if self.debug:
 								print "Even this is compromised. No action possible"
+							self.askAtt = True
+							self.askDef = True
 							return
 					res = self.state.getResource(p)
 					r = res[p]
@@ -262,6 +310,7 @@ class SimulateCyberScenario(object):
 				a = self.attackerList[0]
 				# r = self.state.getResource(*list(it[1][0]))
 				r = a.probe(r)
+				r.probeHistory.append(self.params['currentTime'])
 				r = a.attack(r)
 				self.askDef = True
 				self.askAtt = True
@@ -274,6 +323,8 @@ class SimulateCyberScenario(object):
 				#print "Resource Activated---------------------\n\n"
 				#print self.state.activeResources
 				r.changeStatus(1)
+				r.downTime[-1].append(self.params['currentTime'])
+				r.totalDowntime += self.params['downTime']
 				self.askDef = True
 				self.askAtt = False
 
@@ -291,8 +342,9 @@ class SimulateCyberScenario(object):
 		# info['resourceInfo'] = self.state.resourceReportsList
 		info = self.state.resourceReportsList
 		if(self.debug):
-			print "Updating resource reports to"
+			print "Updating resource reports to\n"
 			print self.state.resourceReportsList
+			print "\n"
 
 		self.params['resourceReports'] = self.state.resourceReportsList
 		info['time'] = self.params['currentTime']
@@ -346,18 +398,33 @@ class SimulateCyberScenario(object):
 
 	def Simulate(self):
 		#Start the simulation and keeps it running
+		#Implements normal wall clock periodic strategy
+		if self.simType == 0 or self.simType == 1:
+			while(self.gameState):
+				self.updateInformation()
+				if(self.askAtt):
+					self.askAttacker()
+				if(self.askDef):
+					self.askDefender()
+				self.executeAction()
 
-		while(self.gameState):
-			self.updateInformation()
-			if(self.askAtt):
-				self.askAttacker()
-			if(self.askDef):
-				self.askDefender()
-			self.executeAction()
-			#time.sleep(1)
-			
-			#if self.debug:
-				#t = raw_input("Press to continue")
+		#Hybdrid defender strategy of #of probes and time
+		#since last probe
+		if self.simType == 2:
+			if self.debug:
+				print "Initializing sim 2"
+			while(self.gameState):
+				self.updateInformation()
+				if self.askAtt:
+					self.askAttacker()
+				self.executeAction()
+ 				if self.askDef:
+					self.updateInformation()
+					act = self.askDefender()
+					if act:
+						self.executeAction()
+						self.askAtt = 1
+
 		self.params['currentTime'] = self.params['endTime']
 		self.updateInformation()
 

@@ -32,24 +32,14 @@ class Utility(object):
 		"""
 
 		#Actions costs - downtime and probe costs
-		# dtCost = -0.3
-		# prCost = -0.1
 		dtCost = self.cparams['dtCost']
 		prCost = self.cparams['prCost']
-		#print "Set dtCost - " + str(dtCost)
-		#print "Set prCost - " + str(prCost)
+		downTime = self.cparams['downTime']
 
 		#Status payoffs - server control costs
 		controlPayoffs = {}
-		# controlPayoffs['DEF'] = [0, 0.1, 0.7, 1.0]
-		# controlPayoffs['ATT'] = [0, 0.3, 0.7, 1.0]
-
 		controlPayoffs['DEF'] = self.cparams['DEF']
 		controlPayoffs['ATT'] = self.cparams['ATT']
-		# print "Set DEF - ",
-		# print controlPayoffs['DEF']
-		# print "Set ATT - ",
-		# print controlPayoffs['ATT']
 
 		self.params['DEF'] = 0
 		self.params['ATT'] = 0
@@ -61,14 +51,17 @@ class Utility(object):
 		prevC = {}
 
 		
-		sCount = {}
+		sCount = {
+		'DEF':0,
+		'ATT':0
+		}
 		prevC['Server0'] = 'DEF'
 		prevC['Server1'] = 'DEF'
 		prevC['Server2'] = 'DEF'
 
 		for it in sorted(data.items()):
-			sCount['DEF'] = 0
-			sCount['ATT'] = 0
+			# sCount['DEF'] = 0
+			# sCount['ATT'] = 0
 			# print "------------------>>"+str(it[0])+"\n"
 			time = it[0]
 			hist = it[1]
@@ -76,26 +69,35 @@ class Utility(object):
 			timeFactor = currentTime - previousTime
 			previousTime = currentTime
 			#Might need to correct this
-			for res, rep in hist['inactiveResources'].iteritems():
-				self.params['totalDowntimeCost'] += timeFactor*dtCost
-				# print "-------->" + res
-				self.params['totalDowntime'] += timeFactor
+			# for res, rep in hist['inactiveResources'].iteritems():
+				# self.params['totalDowntimeCost'] += timeFactor*dtCost
+				# # print "-------->" + res
+				# self.params['totalDowntime'] += timeFactor
 			# print hist['activeResources']	
-			for res, rep in hist['activeResources'].iteritems():
-				sCount[prevC[res]] += 1
-				prevC[res] = rep['Control']
+			# for res, rep in hist['activeResources'].iteritems():
+			# 	sCount[prevC[res]] += 1
+			# 	prevC[res] = rep['Control']
 			for k,v in sCount.iteritems():
-				# print k,v
+				# print k,v, time
+				# print "Do " + str(timeFactor) + "*" +str((controlPayoffs[k])[v])
 				# print ']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]\n'
 				self.params[k] += timeFactor*(controlPayoffs[k])[v]
+				sCount[k] = 0
 			# print self.params
+			for res, rep in hist['activeResources'].iteritems():
+				sCount[rep['Control']] += 1
+
 
 		lastItem = data[max(data.keys(), key=int)]
 		for k,v in lastItem.iteritems():
 			for s,r in v.iteritems():
 				self.params['totalProbeCost'] += r['Total Probes till now']
+				self.params['totalDowntime'] += r['Reimage Count']
 				# print self.params
-		
+
+
+		self.params['totalDowntime'] *= downTime
+		self.params['totalDowntimeCost'] = self.params['totalDowntime']*dtCost
 		payoff = {}
 		payoff["totalProbes"] = self.params['totalProbeCost'] 
 

@@ -5,17 +5,17 @@
 		],
 
 		"DEF": [
-			"periodicRand-57"
+			"periodic-57"
 		]
 	},
 
 	"configuration":{
 		"endTime": "1000",
-		"dtCost": "-0.3",
-		"prCost": "-0.1",
+		"dtCost": "0.3",
+		"prCost": "0.1",
 		"DEF": "0,0.1,0.7,1.0",
 		"ATT": "0,0.3,0.7,1.0",
-		"runs per sample": "5",
+		"runs per sample": "1",
 		"downTime": "7",
 		"alpha": "0.05"
 	}

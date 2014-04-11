@@ -96,6 +96,8 @@ def main():
 		for j in range(0,rps):
 			payoff = runSimulator(args)
 			for k,v in payoff.iteritems():
+				# print "observation:" +  str(i)
+				# print k,v
 				cPayoff[k] += v
 
 		for k,v in cPayoff.iteritems():

@@ -1,0 +1,26 @@
+Mapping of player strategies
+ATT:[periodic-1 periodic-10 periodic-11 periodic-15 periodic-17 periodic-19 periodic-2 periodic-23 periodic-3 periodic-4 periodic-5 periodic-6 periodic-7 periodic-8 periodic-9 ]
+DEF:[periodicRand-10 periodicRand-11 periodicRand-12 periodicRand-13 periodicRand-14 periodicRand-15 periodicRand-16 periodicRand-17 periodicRand-18 periodicRand-19 periodicRand-20 periodicRand-21 periodicRand-22 periodicRand-23 periodicRand-24 periodicRand-25 periodicRand-26 periodicRand-27 periodicRand-28 periodicRand-29 periodicRand-3 periodicRand-37 periodicRand-57 periodicRand-6 periodicRand-7 ]
+
+
+Computes Nash equilibria using extreme point enumeration
+[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+
+
+Compute equilibria via simplicial subdivision
+[Fraction(1, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1)]
+[Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(1, 1)]
+
+
+Compute equilibria in a two-player game via linear complementarity
+[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+
+
+Compute equilibria of a game using polynomial systems of equations
+[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+
+
+Compute Nash equilibria using function minimization
